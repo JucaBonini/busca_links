@@ -37,20 +37,24 @@
                         const lon = position.coords.longitude;
                         
                         // Busca o nome da cidade (Reverse Geocoding)
-                        const geoResponse = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10`);
+                        const geoResponse = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10`, {
+                            headers: {
+                                'User-Agent': 'DioupBusca/1.0'
+                            }
+                        });
                         const geoData = await geoResponse.json();
-                        const cidade = geoData.address.city || geoData.address.town || geoData.address.village || "Local";
+                        const cidade = geoData.address.city || geoData.address.town || geoData.address.village || geoData.address.suburb || "Local";
 
-                        // Busca o clima (Open-Meteo - Sem chave necessária)
+                        // Busca o clima (Open-Meteo)
                         const weatherResponse = await fetch(
                             `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
                         );
                         const weatherData = await weatherResponse.json();
                         const temp = Math.round(weatherData.current_weather.temperature);
                         
-                        tempEl.innerHTML = `<i class="fas fa-temperature-half"></i> ${cidade}: ${temp}°C`;
+                        tempEl.innerHTML = `<i class="fas fa-location-dot"></i> ${cidade} | <i class="fas fa-temperature-half"></i> ${temp}°C`;
                     } catch (error) {
-                        tempEl.innerHTML = '<i class="fas fa-temperature-half"></i> Erro ao carregar clima';
+                        tempEl.innerHTML = '<i class="fas fa-temperature-half"></i> Clima indisponível';
                     }
                 },
                 () => {
