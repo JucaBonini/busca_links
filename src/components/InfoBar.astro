@@ -1,0 +1,89 @@
+---
+---
+<div class="info-bar">
+    <div id="relogio"><i class="fas fa-clock"></i> --:--:--</div>
+    <div id="temperatura"><i class="fas fa-temperature-half"></i> Carregando...</div>
+    <div id="cotacao-dolar"><i class="fas fa-dollar-sign"></i> Dólar: ---</div>
+    <div id="cotacao-bitcoin"><i class="fab fa-bitcoin"></i> Bitcoin: ---</div>
+</div>
+
+<script>
+    // Relógio em tempo real
+    function atualizarRelogio() {
+        const agora = new Date();
+        const options = { 
+            timeStyle: 'medium',
+            hour12: false 
+        };
+        const relogioEl = document.getElementById('relogio');
+        if (relogioEl) {
+            relogioEl.innerHTML = `<i class="fas fa-clock"></i> ${agora.toLocaleTimeString('pt-BR', options)}`;
+        }
+    }
+
+    setInterval(atualizarRelogio, 1000);
+    atualizarRelogio();
+
+    // Temperatura local
+    function obterTemperatura() {
+        const tempEl = document.getElementById('temperatura');
+        if (!tempEl) return;
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    try {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        // Usando uma chave pública de exemplo para demonstração ou placeholder
+                        const apiKey = 'SUA_CHAVE_AQUI'; // Idealmente injetada via env ou passada pelo usuário
+                        if (apiKey === 'SUA_CHAVE_AQUI') {
+                           tempEl.innerHTML = '<i class="fas fa-temperature-half"></i> Local: Insira sua API Key';
+                           return;
+                        }
+                        const response = await fetch(
+                            `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=pt_br`
+                        );
+                        const data = await response.json();
+                        tempEl.innerHTML = `<i class="fas fa-temperature-half"></i> ${data.name}: ${Math.round(data.main.temp)}°C`;
+                    } catch (error) {
+                        tempEl.innerHTML = '<i class="fas fa-temperature-half"></i> Erro ao carregar';
+                    }
+                },
+                () => {
+                    tempEl.innerHTML = '<i class="fas fa-temperature-half"></i> Local: Ative a localização';
+                }
+            );
+        } else {
+            tempEl.innerHTML = '<i class="fas fa-temperature-half"></i> Não suportado';
+        }
+    }
+
+    obterTemperatura();
+
+    // Cotações
+    async function obterCotacoes() {
+        const dolarEl = document.getElementById('cotacao-dolar');
+        const btcEl = document.getElementById('cotacao-bitcoin');
+
+        try {
+            const response = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL,BTC-BRL');
+            const data = await response.json();
+            
+            if (dolarEl) {
+                const dolar = parseFloat(data.USDBRL.bid).toFixed(2);
+                dolarEl.innerHTML = `<i class="fas fa-dollar-sign"></i> Dólar: R$ ${dolar}`;
+            }
+            if (btcEl) {
+                const btcValue = parseFloat(data.BTCBRL.bid).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+                btcEl.innerHTML = `<i class="fab fa-bitcoin"></i> Bitcoin: R$ ${btcValue}`;
+            }
+        } catch (error) {
+            if (dolarEl) dolarEl.innerHTML = '<i class="fas fa-dollar-sign"></i> Dólar: Indisponível';
+            if (btcEl) btcEl.innerHTML = '<i class="fab fa-bitcoin"></i> Bitcoin: Indisponível';
+        }
+    }
+
+    obterCotacoes();
+    setInterval(obterCotacoes, 300000); // 5 min
+</script>

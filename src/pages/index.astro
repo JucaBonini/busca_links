@@ -1,0 +1,105 @@
+---
+import Header from '../components/Header.astro';
+import CategoryCard from '../components/CategoryCard.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+const categories = [
+    {
+        title: "Redes Sociais",
+        icon: "fas fa-users",
+        links: [
+            { href: "https://www.facebook.com", img: "/images/imglink/webp/sociais/face.webp", alt: "facebook" },
+            { href: "https://www.instagram.com", img: "/images/imglink/webp/sociais/insta.webp", alt: "instagram" },
+            { href: "https://www.x.com", img: "/images/imglink/webp/sociais/x.webp", alt: "x" },
+            { href: "https://www.linkedin.com", img: "/images/imglink/webp/sociais/link.webp", alt: "linkedin" },
+            { href: "https://www.tiktok.com", img: "/images/imglink/webp/sociais/tiktok.webp", alt: "tiktok" },
+            { href: "https://br.pinterest.com/", img: "/images/imglink/webp/sociais/pinterest.webp", alt: "pinterest" }
+        ]
+    },
+    {
+        title: "Streaming",
+        icon: "fas fa-film",
+        links: [
+            { href: "https://www.youtube.com/", img: "/images/imglink/webp/videos/youtube.webp", alt: "youtube" },
+            { href: "https://www.netflix.com/", img: "/images/imglink/webp/videos/netflix.webp", alt: "netflix" },
+            { href: "https://globoplay.globo.com/", img: "/images/imglink/webp/videos/globoplay.webp", alt: "globoplay" },
+            { href: "https://www.primevideo.com/", img: "/images/imglink/webp/videos/prime.webp", alt: "primevideo" },
+            { href: "https://www.max.com/br/pt", img: "/images/imglink/webp/videos/max.webp", alt: "max" },
+            { href: "https://www.disneyplus.com/pt-br", img: "/images/imglink/webp/videos/disneyplus.webp", alt: "disneyplus" }
+        ]
+    },
+    {
+        title: "Notícias",
+        icon: "fas fa-newspaper",
+        links: [
+            { href: "https://www.globo.com", img: "/images/imglink/webp/noticias/globo.webp", alt: "globo" },
+            { href: "https://www.uol.com.br", img: "/images/imglink/webp/noticias/Uol.webp", alt: "uol" },
+            { href: "https://www.terra.com.br", img: "/images/imglink/webp/noticias/terra.webp", alt: "terra" },
+            { href: "https://www.cnnbrasil.com.br/", img: "/images/imglink/webp/noticias/cnnbrasil.webp", alt: "cnn" },
+            { href: "https://www.msn.com/pt-br/", img: "/images/imglink/webp/noticias/msn.webp", alt: "msn" },
+            { href: "https://iclnoticias.com.br/", img: "/images/imglink/webp/noticias/ICL.webp", alt: "icl" }
+        ]
+    },
+    {
+        title: "Esportes",
+        icon: "fas fa-futbol",
+        links: [
+            { href: "https://ge.globo.com/", img: "/images/imglink/webp/esportes/ge.webp", alt: "ge" },
+            { href: "https://www.espn.com.br/", img: "/images/imglink/webp/esportes/espn.webp", alt: "espn" },
+            { href: "https://www.gazetaesportiva.com/", img: "/images/imglink/webp/esportes/gazetaesportiva.webp", alt: "gazetaesportiva" },
+            { href: "https://www.lance.com.br/", img: "/images/imglink/webp/esportes/lance.webp", alt: "lance" },
+            { href: "https://tntsports.com.br/", img: "/images/imglink/webp/esportes/tntsports.webp", alt: "tntsports" },
+            { href: "https://bandsports.uol.com.br/", img: "/images/imglink/webp/esportes/bandsports.webp", alt: "bandsports" }
+        ]
+    },
+    {
+        title: "Jogos",
+        icon: "fas fa-gamepad",
+        links: [
+            { href: "https://store.steampowered.com", img: "/images/imglink/webp/jogos/steam.webp", alt: "steam" },
+            { href: "https://www.epicgames.com", img: "/images/imglink/webp/jogos/epic.webp", alt: "epic" },
+            { href: "https://www.xbox.com", img: "/images/imglink/webp/jogos/xbox.webp", alt: "xbox" },
+            { href: "https://www.playstation.com", img: "/images/imglink/webp/jogos/play.webp", alt: "playstation" },
+            { href: "https://www.twitch.tv", img: "/images/imglink/webp/jogos/twitch.webp", alt: "twitch" }
+        ]
+    },
+    {
+        title: "Compras",
+        icon: "fas fa-shopping-cart",
+        links: [
+            { href: "https://www.mercadolivre.com.br/", img: "/images/imglink/webp/compras/ml.webp", alt: "mercadolivre" },
+            { href: "https://www.amazon.com.br/", img: "/images/imglink/webp/compras/amazon.webp", alt: "amazon" },
+            { href: "https://shopee.com.br/", img: "/images/imglink/webp/compras/shopee.webp", alt: "shopee" },
+            { href: "https://br.shein.com/", img: "/images/imglink/webp/compras/shein.webp", alt: "shein" },
+            { href: "https://pt.aliexpress.com/", img: "/images/imglink/webp/compras/aliexpress.webp", alt: "aliexpress" },
+            { href: "https://www.netshoes.com.br/", img: "/images/imglink/webp/compras/neteshoes.webp", alt: "neteshoes" }
+        ]
+    }
+];
+---
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dioup Busca - Agregador de Links Úteis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="generator" content={Astro.generator} />
+</head>
+<body>
+    <Header />
+
+    <main>
+        <div class="container-main">
+            <div class="categories-grid">
+                {categories.map(cat => (
+                    <CategoryCard title={cat.title} icon={cat.icon} links={cat.links} />
+                ))}
+            </div>
+        </div>
+    </main>
+
+    <Footer />
+</body>
+</html>

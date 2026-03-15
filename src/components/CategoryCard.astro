@@ -1,0 +1,23 @@
+---
+export interface Props {
+    title: string;
+    icon: string;
+    links: Array<{
+        href: string;
+        img: string;
+        alt: string;
+    }>;
+}
+
+const { title, icon, links } = Astro.props;
+---
+<section class="category">
+    <h2><i class={icon}></i> {title}</h2>
+    <div class="links">
+        {links.map(link => (
+            <a href={link.href} target="_blank">
+                <img src={link.img} alt={link.alt} width="70" height="70" loading="lazy" />
+            </a>
+        ))}
+    </div>
+</section>
