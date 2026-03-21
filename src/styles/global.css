@@ -39,7 +39,7 @@ header p {
 .container-main {
     width: 100%;
     max-width: 1400px;
-    /* Aumentado para acomodar três colunas */
+    /* Aumentado para acomodar quatro colunas */
     margin: 30px auto;
     padding: 30px;
     background-color: #ffffff;
@@ -57,7 +57,7 @@ header p {
 /* Layout para Desktop */
 @media (min-width: 1200px) {
     .categories-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
     }
 
     /* Ajuste para garantir alinhamento */
@@ -94,10 +94,9 @@ header p {
 }
 
 .links {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
-    justify-content: flex-start;
 }
 
 .links a {
