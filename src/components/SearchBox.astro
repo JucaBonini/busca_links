@@ -1,12 +1,178 @@
 ---
 ---
-<div class="search-container">	
-    <form role="search" method="get" target="_blank" action="https://www.google.com.br/search">
-        <div class="search-box">
-            <input type="text" name="q" placeholder="Pesquise no Google..." autofocus autocomplete="off">
-            <button type="submit">
-                <i class="fas fa-search"></i>
+<div class="search-wrapper">
+    <!-- Alternador de Mecanismo de Busca -->
+    <div class="search-engine-tabs" id="search-engines">
+        <button type="button" class="engine-tab active" data-engine="google" data-url="https://www.google.com/search?q=">
+            <i class="fab fa-google"></i> Google
+        </button>
+        <button type="button" class="engine-tab" data-engine="youtube" data-url="https://www.youtube.com/results?search_query=">
+            <i class="fab fa-youtube"></i> YouTube
+        </button>
+        <button type="button" class="engine-tab" data-engine="chatgpt" data-url="https://chatgpt.com/?q=">
+            <i class="fas fa-robot"></i> ChatGPT
+        </button>
+        <button type="button" class="engine-tab" data-engine="github" data-url="https://github.com/search?q=">
+            <i class="fab fa-github"></i> GitHub
+        </button>
+        <button type="button" class="engine-tab" data-engine="duckduckgo" data-url="https://duckduckgo.com/?q=">
+            <i class="fas fa-shield-halved"></i> DuckDuckGo
+        </button>
+    </div>
+
+    <!-- Barra de Pesquisa Principal -->
+    <form id="omni-search-form" role="search" target="_blank" action="https://www.google.com/search">
+        <div class="search-box-inner">
+            <i class="fas fa-search search-main-icon" id="search-icon"></i>
+            <input 
+                type="text" 
+                name="q" 
+                id="search-input" 
+                class="search-input" 
+                placeholder="Pesquise na web ou filtre seus links..." 
+                autocomplete="off"
+                spellcheck="false"
+            />
+            <span class="search-shortcut-badge">Ctrl + K</span>
+            <button type="button" class="search-clear-btn" id="search-clear-btn" title="Limpar busca (Esc)">
+                <i class="fas fa-times"></i>
             </button>
-        </div>           
+            <button type="submit" class="search-submit-btn">
+                <span>Buscar</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
     </form>
+
+    <!-- Feedback da Busca Instantânea na Página -->
+    <div class="search-feedback-banner" id="search-feedback"></div>
 </div>
+
+<script>
+    const form = document.getElementById('omni-search-form') as HTMLFormElement;
+    const input = document.getElementById('search-input') as HTMLInputElement;
+    const clearBtn = document.getElementById('search-clear-btn') as HTMLButtonElement;
+    const engineTabs = document.querySelectorAll('.engine-tab');
+    const feedbackBanner = document.getElementById('search-feedback');
+
+    let currentBaseUrl = 'https://www.google.com/search?q=';
+
+    // 1. Troca de Mecanismo de Busca
+    engineTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            engineTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            const engineUrl = tab.getAttribute('data-url');
+            const engineName = tab.getAttribute('data-engine');
+            if (engineUrl) currentBaseUrl = engineUrl;
+            
+            if (input) {
+                input.placeholder = `Pesquisar no ${tab.textContent?.trim()} ou filtrar links...`;
+                input.focus();
+            }
+        });
+    });
+
+    // 2. Submissão do Formulário para o Mecanismo Selecionado
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            const query = input?.value.trim();
+            if (!query) {
+                e.preventDefault();
+                return;
+            }
+            // Abre diretamente na URL correta
+            e.preventDefault();
+            window.open(currentBaseUrl + encodeURIComponent(query), '_blank');
+        });
+    }
+
+    // 3. Filtro em Tempo Real dos Links da Página
+    function filtrarLinksNaPagina(termo: string) {
+        const query = termo.toLowerCase().trim();
+        const cards = document.querySelectorAll('.category-card');
+        let totalEncontrados = 0;
+
+        if (!query) {
+            // Restaura tudo
+            cards.forEach(card => {
+                card.classList.remove('is-hidden');
+                card.querySelectorAll('.link-item').forEach(link => {
+                    link.classList.remove('is-hidden', 'is-match');
+                });
+            });
+            if (feedbackBanner) feedbackBanner.style.display = 'none';
+            if (clearBtn) clearBtn.style.display = 'none';
+            return;
+        }
+
+        if (clearBtn) clearBtn.style.display = 'block';
+
+        cards.forEach(card => {
+            const links = card.querySelectorAll('.link-item');
+            let cardTemMatch = false;
+
+            links.forEach(link => {
+                const altText = link.getAttribute('data-name')?.toLowerCase() || '';
+                const hrefText = link.getAttribute('href')?.toLowerCase() || '';
+                
+                if (altText.includes(query) || hrefText.includes(query)) {
+                    link.classList.remove('is-hidden');
+                    link.classList.add('is-match');
+                    cardTemMatch = true;
+                    totalEncontrados++;
+                } else {
+                    link.classList.add('is-hidden');
+                    link.classList.remove('is-match');
+                }
+            });
+
+            if (cardTemMatch) {
+                card.classList.remove('is-hidden');
+            } else {
+                card.classList.add('is-hidden');
+            }
+        });
+
+        if (feedbackBanner) {
+            feedbackBanner.style.display = 'block';
+            feedbackBanner.textContent = totalEncontrados > 0 
+                ? `⚡ ${totalEncontrados} atalho(s) encontrado(s) na página. Pressione Enter para buscar na web.`
+                : `Nenhum atalho salvo com "${termo}". Pressione Enter para buscar na web.`;
+        }
+    }
+
+    if (input) {
+        input.addEventListener('input', (e) => {
+            filtrarLinksNaPagina((e.target as HTMLInputElement).value);
+        });
+    }
+
+    // 4. Limpar Busca
+    if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+            if (input) {
+                input.value = '';
+                filtrarLinksNaPagina('');
+                input.focus();
+            }
+        });
+    }
+
+    // 5. Atalhos de Teclado Globais (Ctrl+K, /, Esc)
+    window.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey && e.key.toLowerCase() === 'k') || (e.key === '/' && document.activeElement !== input)) {
+            e.preventDefault();
+            input?.focus();
+            input?.select();
+        } else if (e.key === 'Escape' && document.activeElement === input) {
+            if (input.value) {
+                input.value = '';
+                filtrarLinksNaPagina('');
+            } else {
+                input.blur();
+            }
+        }
+    });
+</script>

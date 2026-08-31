@@ -6,93 +6,101 @@ import '../styles/global.css';
 
 const categories = [
     {
+        id: "produtividade",
+        title: "Produtividade",
+        icon: "fas fa-bolt",
+        links: [
+            { href: "https://progresso-pessoal.netlify.app/", img: "/images/imglink/webp/produtividade/progresso.webp", alt: "progresso", title: "Progresso.app" },
+        ]
+    },
+    {
+        id: "ia",
+        title: "Inteligência Artificial",
+        icon: "fas fa-robot",
+        links: [
+            { href: "https://chatgpt.com/", img: "/images/imglink/webp/ia/chatgpt.webp", alt: "chatgpt", title: "ChatGPT" },
+            { href: "https://chat.deepseek.com/", img: "/images/imglink/webp/ia/deepseek.webp", alt: "deepseek", title: "DeepSeek" },
+            { href: "https://gemini.google.com/app", img: "/images/imglink/webp/ia/gemini.webp", alt: "gemini", title: "Gemini" }, 
+            { href: "https://www.meta.ai/", img: "/images/imglink/webp/ia/metaai.webp", alt: "metaai", title: "Meta AI" },      
+            { href: "https://manus.im/app", img: "/images/imglink/webp/ia/manus.webp", alt: "manus", title: "Manus" },
+            { href: "https://grok.com/git", img: "/images/imglink/webp/ia/grok.webp", alt: "grok", title: "Grok" },
+        ]
+    },
+    {
+        id: "sociais",
         title: "Redes Sociais",
         icon: "fas fa-users",
         links: [
-            { href: "https://www.facebook.com", img: "/images/imglink/webp/sociais/face.webp", alt: "facebook" },
-            { href: "https://www.instagram.com", img: "/images/imglink/webp/sociais/insta.webp", alt: "instagram" },
-            { href: "https://www.x.com", img: "/images/imglink/webp/sociais/x.webp", alt: "x" },
-            { href: "https://web.whatsapp.com", img: "/images/imglink/webp/sociais/what.webp", alt: "whats" },
-            { href: "https://www.tiktok.com", img: "/images/imglink/webp/sociais/tiktok.webp", alt: "tiktok" },
-            { href: "https://br.pinterest.com/", img: "/images/imglink/webp/sociais/pinterest.webp", alt: "pinterest" }
+            { href: "https://web.whatsapp.com", img: "/images/imglink/webp/sociais/what.webp", alt: "whatsapp", title: "WhatsApp" },
+            { href: "https://www.instagram.com", img: "/images/imglink/webp/sociais/insta.webp", alt: "instagram", title: "Instagram" },
+            { href: "https://www.facebook.com", img: "/images/imglink/webp/sociais/face.webp", alt: "facebook", title: "Facebook" },
+            { href: "https://www.x.com", img: "/images/imglink/webp/sociais/x.webp", alt: "x", title: "X / Twitter" },
+            { href: "https://www.tiktok.com", img: "/images/imglink/webp/sociais/tiktok.webp", alt: "tiktok", title: "TikTok" },
+            { href: "https://br.pinterest.com/", img: "/images/imglink/webp/sociais/pinterest.webp", alt: "pinterest", title: "Pinterest" }
         ]
     },
     {
-        title: "Streaming",
-        icon: "fas fa-film",
+        id: "streaming",
+        title: "Streaming & Vídeos",
+        icon: "fas fa-play-circle",
         links: [
-            { href: "https://www.youtube.com/", img: "/images/imglink/webp/videos/youtube.webp", alt: "youtube" },
-            { href: "https://www.netflix.com/", img: "/images/imglink/webp/videos/netflix.webp", alt: "netflix" },
-            { href: "https://globoplay.globo.com/", img: "/images/imglink/webp/videos/globoplay.webp", alt: "globoplay" },
-            { href: "https://www.primevideo.com/", img: "/images/imglink/webp/videos/prime.webp", alt: "primevideo" },
-            { href: "https://www.max.com/br/pt", img: "/images/imglink/webp/videos/max.webp", alt: "max" },
-            { href: "https://www.disneyplus.com/pt-br", img: "/images/imglink/webp/videos/disneyplus.webp", alt: "disneyplus" }
+            { href: "https://www.youtube.com/", img: "/images/imglink/webp/videos/youtube.webp", alt: "youtube", title: "YouTube" },
+            { href: "https://www.netflix.com/", img: "/images/imglink/webp/videos/netflix.webp", alt: "netflix", title: "Netflix" },
+            { href: "https://globoplay.globo.com/", img: "/images/imglink/webp/videos/globoplay.webp", alt: "globoplay", title: "Globoplay" },
+            { href: "https://www.primevideo.com/", img: "/images/imglink/webp/videos/prime.webp", alt: "primevideo", title: "Prime Video" },
+            { href: "https://www.max.com/br/pt", img: "/images/imglink/webp/videos/max.webp", alt: "max", title: "Max" },
+            { href: "https://www.disneyplus.com/pt-br", img: "/images/imglink/webp/videos/disneyplus.webp", alt: "disneyplus", title: "Disney+" }
         ]
     },
     {
-        title: "IAs",
-        icon: "fas fa-robot",
+        id: "noticias",
+        title: "Notícias & Portais",
+        icon: "fas fa-newspaper",
         links: [
-            { href: "https://chatgpt.com/", img: "/images/imglink/webp/ia/chatgpt.webp", alt: "chatgpt" },
-            { href: "https://chat.deepseek.com/", img: "/images/imglink/webp/ia/deepseek.webp", alt: "deepseek" },
-            { href: "https://gemini.google.com/app", img: "/images/imglink/webp/ia/gemini.webp", alt: "gemini" }, 
-            { href: "https://www.meta.ai/", img: "/images/imglink/webp/ia/metaai.webp", alt: "metaai" },      
-            { href: "https://manus.im/app", img: "/images/imglink/webp/ia/manus.webp", alt: "manus" },
-            { href: "https://grok.com/git", img: "/images/imglink/webp/ia/grok.webp", alt: "grok" },
+            { href: "https://www.globo.com", img: "/images/imglink/webp/noticias/globo.webp", alt: "globo", title: "G1 Globo" },
+            { href: "https://www.uol.com.br", img: "/images/imglink/webp/noticias/Uol.webp", alt: "uol", title: "UOL" },
+            { href: "https://www.terra.com.br", img: "/images/imglink/webp/noticias/terra.webp", alt: "terra", title: "Terra" },
+            { href: "https://www.cnnbrasil.com.br/", img: "/images/imglink/webp/noticias/cnnbrasil.webp", alt: "cnn", title: "CNN Brasil" },
+            { href: "https://www.msn.com/pt-br/", img: "/images/imglink/webp/noticias/msn.webp", alt: "msn", title: "MSN" },
+            { href: "https://iclnoticias.com.br/", img: "/images/imglink/webp/noticias/ICL.webp", alt: "icl", title: "ICL Notícias" }
         ]
     },
     {
+        id: "esportes",
         title: "Esportes",
         icon: "fas fa-futbol",
         links: [
-            { href: "https://ge.globo.com/", img: "/images/imglink/webp/esportes/ge.webp", alt: "ge" },
-            { href: "https://www.espn.com.br/", img: "/images/imglink/webp/esportes/espn.webp", alt: "espn" },
-            { href: "https://www.gazetaesportiva.com/", img: "/images/imglink/webp/esportes/gazetaesportiva.webp", alt: "gazetaesportiva" },
-            { href: "https://www.lance.com.br/", img: "/images/imglink/webp/esportes/lance.webp", alt: "lance" },
-            { href: "https://tntsports.com.br/", img: "/images/imglink/webp/esportes/tntsports.webp", alt: "tntsports" },
-            { href: "https://bandsports.uol.com.br/", img: "/images/imglink/webp/esportes/bandsports.webp", alt: "bandsports" }
-        ]
-    },
-      {
-        title: "Notícias",
-        icon: "fas fa-newspaper",
-        links: [
-            { href: "https://www.globo.com", img: "/images/imglink/webp/noticias/globo.webp", alt: "globo" },
-            { href: "https://www.uol.com.br", img: "/images/imglink/webp/noticias/Uol.webp", alt: "uol" },
-            { href: "https://www.terra.com.br", img: "/images/imglink/webp/noticias/terra.webp", alt: "terra" },
-            { href: "https://www.cnnbrasil.com.br/", img: "/images/imglink/webp/noticias/cnnbrasil.webp", alt: "cnn" },
-            { href: "https://www.msn.com/pt-br/", img: "/images/imglink/webp/noticias/msn.webp", alt: "msn" },
-            { href: "https://iclnoticias.com.br/", img: "/images/imglink/webp/noticias/ICL.webp", alt: "icl" }
+            { href: "https://ge.globo.com/", img: "/images/imglink/webp/esportes/ge.webp", alt: "ge", title: "GE Globo" },
+            { href: "https://www.espn.com.br/", img: "/images/imglink/webp/esportes/espn.webp", alt: "espn", title: "ESPN" },
+            { href: "https://www.gazetaesportiva.com/", img: "/images/imglink/webp/esportes/gazetaesportiva.webp", alt: "gazetaesportiva", title: "Gazeta" },
+            { href: "https://www.lance.com.br/", img: "/images/imglink/webp/esportes/lance.webp", alt: "lance", title: "Lance!" },
+            { href: "https://tntsports.com.br/", img: "/images/imglink/webp/esportes/tntsports.webp", alt: "tntsports", title: "TNT Sports" },
+            { href: "https://bandsports.uol.com.br/", img: "/images/imglink/webp/esportes/bandsports.webp", alt: "bandsports", title: "BandSports" }
         ]
     },
     {
-        title: "Jogos",
+        id: "jogos",
+        title: "Jogos & Games",
         icon: "fas fa-gamepad",
         links: [
-            { href: "https://store.steampowered.com", img: "/images/imglink/webp/jogos/steam.webp", alt: "steam" },
-            { href: "https://www.epicgames.com", img: "/images/imglink/webp/jogos/epic.webp", alt: "epic" },
-            { href: "https://www.xbox.com", img: "/images/imglink/webp/jogos/xbox.webp", alt: "xbox" },
-            { href: "https://www.playstation.com", img: "/images/imglink/webp/jogos/play.webp", alt: "playstation" },
-            { href: "https://www.twitch.tv", img: "/images/imglink/webp/jogos/twitch.webp", alt: "twitch" }
+            { href: "https://store.steampowered.com", img: "/images/imglink/webp/jogos/steam.webp", alt: "steam", title: "Steam" },
+            { href: "https://www.epicgames.com", img: "/images/imglink/webp/jogos/epic.webp", alt: "epic", title: "Epic Games" },
+            { href: "https://www.xbox.com", img: "/images/imglink/webp/jogos/xbox.webp", alt: "xbox", title: "Xbox" },
+            { href: "https://www.playstation.com", img: "/images/imglink/webp/jogos/play.webp", alt: "playstation", title: "PlayStation" },
+            { href: "https://www.twitch.tv", img: "/images/imglink/webp/jogos/twitch.webp", alt: "twitch", title: "Twitch" }
         ]
     },
     {
-        title: "Compras",
-        icon: "fas fa-shopping-cart",
+        id: "compras",
+        title: "Compras Online",
+        icon: "fas fa-shopping-bag",
         links: [
-            { href: "https://www.mercadolivre.com.br/", img: "/images/imglink/webp/compras/ml.webp", alt: "mercadolivre" },
-            { href: "https://www.amazon.com.br/", img: "/images/imglink/webp/compras/amazon.webp", alt: "amazon" },
-            { href: "https://shopee.com.br/", img: "/images/imglink/webp/compras/shopee.webp", alt: "shopee" },
-            { href: "https://br.shein.com/", img: "/images/imglink/webp/compras/shein.webp", alt: "shein" },
-            { href: "https://pt.aliexpress.com/", img: "/images/imglink/webp/compras/aliexpress.webp", alt: "aliexpress" },
-            { href: "https://www.netshoes.com.br/", img: "/images/imglink/webp/compras/neteshoes.webp", alt: "neteshoes" }
-        ]
-    },
-    {
-        title: "Produtividade",
-        icon: "fas fa-tasks",
-        links: [
-            { href: "https://progresso-pessoal.netlify.app/", img: "/images/imglink/webp/produtividade/progresso.webp", alt: "Progresso.app" }
+            { href: "https://www.mercadolivre.com.br/", img: "/images/imglink/webp/compras/ml.webp", alt: "mercadolivre", title: "Mercado Livre" },
+            { href: "https://www.amazon.com.br/", img: "/images/imglink/webp/compras/amazon.webp", alt: "amazon", title: "Amazon" },
+            { href: "https://shopee.com.br/", img: "/images/imglink/webp/compras/shopee.webp", alt: "shopee", title: "Shopee" },
+            { href: "https://br.shein.com/", img: "/images/imglink/webp/compras/shein.webp", alt: "shein", title: "Shein" },
+            { href: "https://pt.aliexpress.com/", img: "/images/imglink/webp/compras/aliexpress.webp", alt: "aliexpress", title: "AliExpress" },
+            { href: "https://www.netshoes.com.br/", img: "/images/imglink/webp/compras/neteshoes.webp", alt: "neteshoes", title: "Netshoes" }
         ]
     }
 ];
@@ -100,25 +108,78 @@ const categories = [
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dioup Busca - Agregador de Links Úteis</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dioup Busca — Portal Inteligente de Links & Produtividade</title>
+    <meta name="description" content="Seu agregador moderno e rápido de links úteis, inteligência artificial, ferramentas de produtividade, streaming, notícias e esportes." />
+    <meta name="theme-color" content="#6366f1" />
+
+    <!-- Script de Inicialização Rápida de Tema para Evitar FOUC -->
+    <script is:inline>
+        (function() {
+            const savedTheme = localStorage.getItem('dioup_theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+
+    <!-- FontAwesome 6 Pro/Free Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <meta name="generator" content={Astro.generator} />
 </head>
 <body>
     <Header />
 
+    <!-- Barra de Navegação Rápida de Categorias -->
+    <nav class="category-nav-wrapper" aria-label="Filtro de categorias">
+        <button class="nav-tab-btn active" data-tab="all">
+            <i class="fas fa-th-large"></i> Todos
+        </button>
+        {categories.map(cat => (
+            <button class="nav-tab-btn" data-tab={cat.id}>
+                <i class={cat.icon}></i> {cat.title}
+            </button>
+        ))}
+    </nav>
+
+    <!-- Conteúdo Principal com Grade Bento -->
     <main>
-        <div class="container-main">
-            <div class="categories-grid">
-                {categories.map(cat => (
-                    <CategoryCard title={cat.title} icon={cat.icon} links={cat.links} />
-                ))}
-            </div>
+        <div class="categories-grid" id="main-grid">
+            {categories.map(cat => (
+                <CategoryCard 
+                    id={cat.id}
+                    title={cat.title} 
+                    icon={cat.icon} 
+                    links={cat.links} 
+                />
+            ))}
         </div>
     </main>
 
     <Footer />
+
+    <script>
+        // Sistema de Abas de Navegação Rápida
+        const tabBtns = document.querySelectorAll('.nav-tab-btn');
+        const cards = document.querySelectorAll('.category-card');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const targetTab = btn.getAttribute('data-tab');
+
+                cards.forEach(card => {
+                    if (targetTab === 'all' || card.getAttribute('data-category') === targetTab) {
+                        card.classList.remove('is-hidden');
+                    } else {
+                        card.classList.add('is-hidden');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

@@ -1,33 +1,88 @@
 ---
 ---
 <div class="info-bar">
-    <div id="relogio"><i class="fas fa-clock"></i> --:--:--</div>
-    <div id="temperatura"><i class="fas fa-temperature-half"></i> Carregando...</div>
-    <div id="cotacao-dolar"><i class="fas fa-dollar-sign"></i> Dólar: ---</div>
-    <div id="cotacao-bitcoin"><i class="fab fa-bitcoin"></i> Bitcoin: ---</div>
+    <!-- Relógio & Data -->
+    <div class="info-card">
+        <div class="info-icon time">
+            <i class="fas fa-clock"></i>
+        </div>
+        <div class="info-content">
+            <span class="info-label" id="data-atual">Carregando...</span>
+            <span class="info-val" id="relogio"><span class="skeleton"></span></span>
+        </div>
+    </div>
+
+    <!-- Clima & Localização -->
+    <div class="info-card">
+        <div class="info-icon weather" id="clima-icon">
+            <i class="fas fa-cloud-sun"></i>
+        </div>
+        <div class="info-content">
+            <span class="info-label" id="clima-cidade">Clima Local</span>
+            <span class="info-val" id="temperatura"><span class="skeleton"></span></span>
+        </div>
+    </div>
+
+    <!-- Cotação Dólar -->
+    <div class="info-card">
+        <div class="info-icon dollar">
+            <i class="fas fa-dollar-sign"></i>
+        </div>
+        <div class="info-content">
+            <span class="info-label">Dólar Comercial</span>
+            <span class="info-val" id="cotacao-dolar"><span class="skeleton"></span></span>
+        </div>
+    </div>
+
+    <!-- Cotação Bitcoin -->
+    <div class="info-card">
+        <div class="info-icon crypto">
+            <i class="fab fa-bitcoin"></i>
+        </div>
+        <div class="info-content">
+            <span class="info-label">Bitcoin</span>
+            <span class="info-val" id="cotacao-bitcoin"><span class="skeleton"></span></span>
+        </div>
+    </div>
 </div>
 
 <script>
-    // Relógio em tempo real
-    function atualizarRelogio() {
+    // 1. Relógio e Data em tempo real
+    function atualizarRelogioEData() {
         const agora = new Date();
-        const options = { 
-            timeStyle: 'medium',
-            hour12: false 
-        };
+        
         const relogioEl = document.getElementById('relogio');
+        const dataEl = document.getElementById('data-atual');
+        
         if (relogioEl) {
-            relogioEl.innerHTML = `<i class="fas fa-clock"></i> ${agora.toLocaleTimeString('pt-BR', options)}`;
+            relogioEl.textContent = agora.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+        }
+        
+        if (dataEl) {
+            const opcoesData: Intl.DateTimeFormatOptions = { 
+                weekday: 'short', 
+                day: '2-digit', 
+                month: 'short' 
+            };
+            dataEl.textContent = agora.toLocaleDateString('pt-BR', opcoesData).toUpperCase();
         }
     }
 
-    setInterval(atualizarRelogio, 1000);
-    atualizarRelogio();
+    setInterval(atualizarRelogioEData, 1000);
+    atualizarRelogioEData();
 
-    // Temperatura local
-    async function obterTemperatura() {
+    // 2. Clima e Localização
+    async function obterClimaLocal() {
         const tempEl = document.getElementById('temperatura');
-        if (!tempEl) return;
+        const cidadeEl = document.getElementById('clima-cidade');
+        const iconContainer = document.getElementById('clima-icon');
+        
+        if (!tempEl || !cidadeEl) return;
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -35,62 +90,81 @@
                     try {
                         const lat = position.coords.latitude;
                         const lon = position.coords.longitude;
-                        
-                        // Busca o nome da cidade (Reverse Geocoding)
-                        const geoResponse = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10`, {
-                            headers: {
-                                'User-Agent': 'DioupBusca/1.0'
-                            }
-                        });
-                        const geoData = await geoResponse.json();
-                        const cidade = geoData.address.city || geoData.address.town || geoData.address.village || geoData.address.suburb || "Local";
 
-                        // Busca o clima (Open-Meteo)
-                        const weatherResponse = await fetch(
-                            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
-                        );
-                        const weatherData = await weatherResponse.json();
-                        const temp = Math.round(weatherData.current_weather.temperature);
-                        
-                        tempEl.innerHTML = `<i class="fas fa-location-dot"></i> ${cidade} | <i class="fas fa-temperature-half"></i> ${temp}°C`;
+                        // Busca clima e geocodificação em paralelo
+                        const [geoRes, weatherRes] = await Promise.all([
+                            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10`, {
+                                headers: { 'User-Agent': 'DioupBusca/2.0' }
+                            }).catch(() => null),
+                            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`)
+                        ]);
+
+                        let cidade = "Sua Região";
+                        if (geoRes && geoRes.ok) {
+                            const geoData = await geoRes.json();
+                            cidade = geoData.address.city || geoData.address.town || geoData.address.municipality || geoData.address.suburb || "Local";
+                        }
+
+                        if (weatherRes.ok) {
+                            const weatherData = await weatherRes.json();
+                            const temp = Math.round(weatherData.current_weather.temperature);
+                            const weatherCode = weatherData.current_weather.weathercode;
+                            
+                            cidadeEl.textContent = cidade;
+                            tempEl.textContent = `${temp}°C`;
+
+                            // Ajuste do ícone baseado no código WMO
+                            if (iconContainer) {
+                                if (weatherCode === 0) iconContainer.innerHTML = '<i class="fas fa-sun"></i>';
+                                else if (weatherCode <= 3) iconContainer.innerHTML = '<i class="fas fa-cloud-sun"></i>';
+                                else if (weatherCode <= 67) iconContainer.innerHTML = '<i class="fas fa-cloud-rain"></i>';
+                                else if (weatherCode <= 99) iconContainer.innerHTML = '<i class="fas fa-bolt"></i>';
+                            }
+                        }
                     } catch (error) {
-                        tempEl.innerHTML = '<i class="fas fa-temperature-half"></i> Clima indisponível';
+                        cidadeEl.textContent = "Clima";
+                        tempEl.textContent = "Indisponível";
                     }
                 },
                 () => {
-                    tempEl.innerHTML = '<i class="fas fa-temperature-half"></i> Local: Ative a localização';
-                }
+                    cidadeEl.textContent = "Clima";
+                    tempEl.textContent = "Ativar GPS";
+                },
+                { timeout: 8000 }
             );
         } else {
-            tempEl.innerHTML = '<i class="fas fa-temperature-half"></i> Não suportado';
+            cidadeEl.textContent = "Clima";
+            tempEl.textContent = "Não suportado";
         }
     }
 
-    obterTemperatura();
+    obterClimaLocal();
 
-    // Cotações
+    // 3. Cotações Financeiras (AwesomeAPI)
     async function obterCotacoes() {
         const dolarEl = document.getElementById('cotacao-dolar');
         const btcEl = document.getElementById('cotacao-bitcoin');
 
         try {
             const response = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL,BTC-BRL');
-            const data = await response.json();
+            if (!response.ok) throw new Error('Falha na API');
             
-            if (dolarEl) {
+            const data = await response.json();
+
+            if (dolarEl && data.USDBRL) {
                 const dolar = parseFloat(data.USDBRL.bid).toFixed(2);
-                dolarEl.innerHTML = `<i class="fas fa-dollar-sign"></i> Dólar: R$ ${dolar}`;
+                dolarEl.textContent = `R$ ${dolar.replace('.', ',')}`;
             }
-            if (btcEl) {
-                const btcValue = parseFloat(data.BTCBRL.bid).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-                btcEl.innerHTML = `<i class="fab fa-bitcoin"></i> Bitcoin: R$ ${btcValue}`;
+            if (btcEl && data.BTCBRL) {
+                const btcVal = parseFloat(data.BTCBRL.bid);
+                btcEl.textContent = btcVal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
             }
         } catch (error) {
-            if (dolarEl) dolarEl.innerHTML = '<i class="fas fa-dollar-sign"></i> Dólar: Indisponível';
-            if (btcEl) btcEl.innerHTML = '<i class="fab fa-bitcoin"></i> Bitcoin: Indisponível';
+            if (dolarEl) dolarEl.textContent = "Indisponível";
+            if (btcEl) btcEl.textContent = "Indisponível";
         }
     }
 
     obterCotacoes();
-    setInterval(obterCotacoes, 300000); // 5 min
+    setInterval(obterCotacoes, 180000); // 3 minutos
 </script>

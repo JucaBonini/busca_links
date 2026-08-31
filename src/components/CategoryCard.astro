@@ -1,22 +1,50 @@
 ---
 export interface Props {
+    id?: string;
     title: string;
     icon: string;
     links: Array<{
         href: string;
         img: string;
         alt: string;
+        title?: string;
     }>;
 }
 
-const { title, icon, links } = Astro.props;
+const { id, title, icon, links } = Astro.props;
 ---
-<section class="category">
-    <h2><i class={icon}></i> {title}</h2>
-    <div class="links">
+<section class="category-card" data-category={id || title.toLowerCase()}>
+    <div class="category-header">
+        <div class="category-title-group">
+            <div class="category-icon-badge">
+                <i class={icon}></i>
+            </div>
+            <h2 class="category-title">{title}</h2>
+        </div>
+        <span class="category-count">{links.length} links</span>
+    </div>
+
+    <div class="links-grid">
         {links.map(link => (
-            <a href={link.href} target="_blank">
-                <img src={link.img} alt={link.alt} width="70" height="70" loading="lazy" />
+            <a 
+                href={link.href} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="link-item" 
+                data-name={link.alt || link.title || ''}
+                title={link.title || link.alt}
+            >
+                <div class="link-icon-container">
+                    <img 
+                        src={link.img} 
+                        alt={link.alt} 
+                        width="48" 
+                        height="48" 
+                        loading="lazy" 
+                        decoding="async"
+                    />
+                </div>
+                <span class="link-title">{link.title || link.alt}</span>
             </a>
         ))}
     </div>

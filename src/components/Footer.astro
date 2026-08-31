@@ -1,6 +1,17 @@
 ---
+const currentYear = new Date().getFullYear();
 ---
 <footer>
-    <p>© 2024 Dioup Busca - Todos os direitos reservados</p>
-    <p class="api-credits">Dados de cotações: HG Brasil | Dados meteorológicos: OpenWeatherMap</p>
+    <div class="footer-container">
+        <div class="footer-left">
+            <div class="footer-brand">Dioup Busca Hub</div>
+            <div class="footer-copy">© {currentYear} Todos os direitos reservados. Atalho rápido: <kbd style="background:var(--bg-pill); padding:2px 6px; border-radius:4px; border:1px solid var(--border-subtle); font-size:0.75rem;">Ctrl + K</kbd> para buscar.</div>
+        </div>
+
+        <div class="footer-credits">
+            <span><i class="fas fa-shield-alt"></i> Seguro & Rápido</span>
+            <span><i class="fas fa-chart-line"></i> Cotações: AwesomeAPI</span>
+            <span><i class="fas fa-cloud"></i> Clima: Open-Meteo</span>
+        </div>
+    </div>
 </footer>

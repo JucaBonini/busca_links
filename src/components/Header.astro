@@ -2,8 +2,62 @@
 import InfoBar from './InfoBar.astro';
 import SearchBox from './SearchBox.astro';
 ---
-<header>
+<header class="header-wrapper">
+    <div class="header-top">
+        <div class="brand-container">
+            <div class="brand-logo">
+                <i class="fas fa-compass"></i>
+            </div>
+            <div class="brand-info">
+                <h1>
+                    Dioup Busca 
+                    <span class="brand-badge">PRO</span>
+                </h1>
+                <p>Agregador inteligente de links, notícias e produtividade</p>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <button id="theme-toggle" class="theme-toggle-btn" type="button" aria-label="Alternar tema">
+                <i class="fas fa-moon" id="theme-icon"></i>
+                <span id="theme-text">Modo Escuro</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Barra de Informações e Widgets em Tempo Real -->
     <InfoBar />
-    <h1><i class="fas fa-search"></i> Dioup Busca</h1>
+
+    <!-- Super Barra de Pesquisa -->
     <SearchBox />
 </header>
+
+<script>
+    // Gerenciador de Tema (Dark / Light)
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+
+    function aplicarTema(tema: string) {
+        if (tema === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            if (themeIcon) themeIcon.className = 'fas fa-sun';
+            if (themeText) themeText.textContent = 'Modo Claro';
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            if (themeIcon) themeIcon.className = 'fas fa-moon';
+            if (themeText) themeText.textContent = 'Modo Escuro';
+        }
+        localStorage.setItem('dioup_theme', tema);
+    }
+
+    // Inicialização
+    const temaSalvo = localStorage.getItem('dioup_theme') || 'dark';
+    aplicarTema(temaSalvo);
+
+    themeBtn?.addEventListener('click', () => {
+        const temaAtual = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        const novoTema = temaAtual === 'light' ? 'dark' : 'light';
+        aplicarTema(novoTema);
+    });
+</script>
